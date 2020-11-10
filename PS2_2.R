@@ -12,24 +12,24 @@ Wind_data <- as_tibble(Keeling_Data)
 class(Wind_data)
 # Check the variables
 head(Wind_data)
-#¶Ô·çºÍÈÕÆÚµÄĞÅÏ¢½øĞĞ²ğ·Ö´¦Àí
+#å¯¹é£å’Œæ—¥æœŸçš„ä¿¡æ¯è¿›è¡Œæ‹†åˆ†å¤„ç†
 Wind          <- Wind_data         %>%
      select(WND,DATE)
 Wind_value    <- separate(Wind,WND,into=c("direction_angle","quality_code","tyre_code","speed_rate","speed_code"),sep = ",")
 Wind_value1   <- separate(Wind_value,DATE,into=c("year","month","day_hour"),sep = "-")
 Wind_value2   <- separate(Wind_value1,day_hour,into=c("day","hour"),sep = "T")
-#´¢´æĞèÒªµÄĞÅÏ¢£¬½«ÌìÊıÈ«¶¨Îª1ºÅ
+#å‚¨å­˜éœ€è¦çš„ä¿¡æ¯ï¼Œå°†å¤©æ•°å…¨å®šä¸º1å·
 wind_data1    <- Wind_value2      %>%
   select(year,month,day,speed_rate,speed_code)
 wind_data2    <- wind_data1       %>%
   mutate(day_mean = 1)
-#½«ÄêÔÂÈÕÆ´½Ó£¬Éú³ÉĞÂµÄÒ»ÁĞ 
+#å°†å¹´æœˆæ—¥æ‹¼æ¥ï¼Œç”Ÿæˆæ–°çš„ä¸€åˆ— 
 wind_ymd  <-  wind_data2          %>%
       mutate(year_month_day=paste(year,month,day_mean,sep="-")) 
     
 wind_ymd                          %>%
   select(year,year_month_day,speed_rate,speed_code)          %>%
-  filter((speed_code=="1")|(speed_code=="5")|(speed_code=="0")|(speed_code=="4") )  %>%  #±êÊ¶ÖµÎª0 1 4 5µÄÎªºÃÊı¾İ
+  filter((speed_code=="1")|(speed_code=="5")|(speed_code=="0")|(speed_code=="4") )  %>%  #æ ‡è¯†å€¼ä¸º0 1 4 5çš„ä¸ºå¥½æ•°æ®
   group_by(year_month_day)        %>%
   summarize(mean_speed_rate = mean(as.numeric(speed_rate)))  %>%
   ggplot(aes(x=as.Date(year_month_day,format='%Y-%m-%d'), y=as.numeric(mean_speed_rate))) + 
@@ -37,3 +37,4 @@ wind_ymd                          %>%
   geom_point() +
   geom_line()
 
+#good work     
