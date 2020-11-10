@@ -17,3 +17,4 @@ ROCKWELL_CITY_P_value                      %>%
   select(DATE,PRCP)                        %>%
   ggplot(aes(x=as.Date(DATE), y=PRCP)) +  
   geom_line()     
+# good work
